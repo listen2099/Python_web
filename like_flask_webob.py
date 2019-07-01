@@ -42,11 +42,9 @@ def app(request: Request) -> Response:  # one req one res
 
 # 关于APP的其他写法A:
 class simple_app_A():
-    def __init__(self, name, age):
-        pass
-
-    def __call__(self, environ, start_response):
-        pass
+    @wsgify
+    def __call__(self, request: Request):
+        return 'ok'
 
 
 # 关于APP的其他写法B:
@@ -72,8 +70,8 @@ class simple_app_B():
 #     httpd.serve_forever()
 
 if __name__ == '__main__':
-
-    with make_server('0.0.0.0', 9000, app) as httpd:  # 撞见server
+    with make_server('0.0.0.0', 9000, simple_app_A()) as httpd:  # 撞见server
+        # with make_server('0.0.0.0', 9000, app) as httpd:  # 撞见server
         print("Serving on port 9000...")
         try:
             httpd.serve_forever()
@@ -82,5 +80,3 @@ if __name__ == '__main__':
         except KeyboardInterrupt:
             print('stop')
             httpd.server_close()
-
-
