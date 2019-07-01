@@ -10,8 +10,10 @@ def simple_app(environ, start_response):  # 这两个参数是自动注入的
     # qs = {k: v for k, _, v in map(lambda x: x.partition('='), query_string.split('&'))}
     # qs = cgi.parse_qs(query_string)  # cgi已过期
     # print(qs)
-    qs = parse_qs(query_string)
+    qs = parse_qs(query_string)  # 专门用来解析查询字符串的
     print(qs)
+    method = environ.get('REQUEST_METHOD')
+    print(method)
     status = '200 OK'
     headers = [('Content-type', 'text/plain; charset=utf-8')]
 
