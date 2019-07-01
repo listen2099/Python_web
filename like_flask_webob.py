@@ -11,8 +11,8 @@ def simple_app(environ, start_response):  # 这两个参数是自动注入的
     print(request.GET)
     print(type(request.GET))  # dict 只管理get
     print(request.POST)  # 只管理post
-    print(request.path)
     print(request.params)  # 同时管理get和post
+    print(request.path)
     print(request.headers)  # 请求头
 
     status = '200 OK'
