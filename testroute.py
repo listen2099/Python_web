@@ -19,18 +19,26 @@ def donothing(request: Request):
     pass
 
 
-# 关于APP的其他写法A:
-class App:
-    _ROUTERTABLE = {
+class Router:
+    ROUTERTABLE = {
         '/': indexhandler,
         '/python': pythonhandler
     }
+
+    @classmethod
+    def register(cls, path, handler):
+        cls.ROUTERTABLE[path] = handler
+
+
+# 关于APP的其他写法A:
+class App:
+    _Router = Router
 
     @wsgify
     def __call__(self, request: Request):  # route, url调度
         path = request.path
         try:
-            return self._ROUTERTABLE.get(path)(request)
+            return self._Router.ROUTERTABLE.get(path)(request)
         except:
             raise HTTPNotFound('<h1>not found</h1>')  # 404
 
