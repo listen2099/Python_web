@@ -9,9 +9,6 @@ FORMAT = '%(asctime)s %(threadName)s %(thread)d %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.INFO)
 
 
-# 127.0.0.1:9000?id=1&name=tom&age=20
-
-
 class Router:
     ROUTERTABLE = {}
 
@@ -20,6 +17,7 @@ class Router:
         def wrapper(handler):
             cls.ROUTERTABLE[path] = handler
             return handler
+
         return wrapper
 
 
@@ -28,7 +26,7 @@ def indexhandler(requset: Request):  # bytes, str, Response, None
     return '<h1>test.com index.html</h1>'
 
 
-@Router.register('python')
+@Router.register('/python')
 def pythonhandler(requset: Request):  # bytes, str, Response, None
     return '<h1>test.com python</h1>'
 
