@@ -3,6 +3,10 @@ from webob import Request, Response
 from webob.dec import wsgify
 
 from webob.exc import HTTPNotFound
+import logging
+
+FORMAT = '%(asctime)s %(threadName)s %(thread)d %(message)s'
+logging.basicConfig(format=FORMAT, level=logging.INFO)
 
 
 # 127.0.0.1:9000?id=1&name=tom&age=20
@@ -20,14 +24,15 @@ def donothing(request: Request):
 
 
 class Router:
-    ROUTERTABLE = {
-        '/': indexhandler,
-        '/python': pythonhandler
-    }
+    ROUTERTABLE = {}
 
     @classmethod
     def register(cls, path, handler):
         cls.ROUTERTABLE[path] = handler
+
+
+Router.register('/', indexhandler)
+Router.register('/python', pythonhandler)
 
 
 # 关于APP的其他写法A:
@@ -39,7 +44,8 @@ class App:
         path = request.path
         try:
             return self._Router.ROUTERTABLE.get(path)(request)
-        except:
+        except Exception as e:
+            logging.info(e)
             raise HTTPNotFound('<h1>not found</h1>')  # 404
 
 
