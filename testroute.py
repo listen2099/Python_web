@@ -20,7 +20,7 @@ def donothing(request: Request):
 
 
 # 关于APP的其他写法A:
-class App():
+class App:
     _ROUTERTABLE = {
         '/': indexhandler,
         '/python': pythonhandler
