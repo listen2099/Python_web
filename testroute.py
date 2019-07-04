@@ -2,27 +2,37 @@ from wsgiref.simple_server import make_server
 from webob import Request, Response
 from webob.dec import wsgify
 
+from webob.exc import HTTPNotFound
+
 
 # 127.0.0.1:9000?id=1&name=tom&age=20
 
 def indexhandler(requset: Request):  # bytes, str, Response, None
-    pass
+    return '<h1>test.com index.html</h1>'
 
 
 def pythonhandler(requset: Request):  # bytes, str, Response, None
+    return '<h1>test.com python</h1>'
+
+
+def donothing(request: Request):
     pass
 
 
 # 关于APP的其他写法A:
 class App():
+    _ROUTERTABLE = {
+        '/': indexhandler,
+        '/python': pythonhandler
+    }
+
     @wsgify
     def __call__(self, request: Request):  # route, url调度
         path = request.path
-        if path == '/':
-            return indexhandler(request)
-        elif path == '/python':
-            return pythonhandler(request)
-        return 'ok'
+        try:
+            return self._ROUTERTABLE.get(path)(request)
+        except:
+            raise HTTPNotFound('<h1>not found</h1>')  # 404
 
 
 if __name__ == '__main__':
